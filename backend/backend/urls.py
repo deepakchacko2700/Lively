@@ -27,9 +27,9 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'', views.catchall),
+    path('', views.catchall),
     path('api/', include('api.urls')),
     path('api-token-auth/', CustomAuthToken.as_view(), name='api-token-auth'),
     path('api-logout/', LogOut.as_view(), name='api-logout')
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

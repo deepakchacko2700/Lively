@@ -24,12 +24,12 @@ from .permissons import ProfilePermissions, PostPermissions
 class CreateUserView(APIView):
     serializer_class = CreateUserSerializer
     permission_classes = [AllowAny]
-
+    print('PING')
     def post(self, request):
         serializer = self.serializer_class(data = request.data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
-            # print(validated_data)
+            print(validated_data)
             newUser = serializer.save()
             Token.objects.create(user=newUser)
             newProfile = Profile(user=newUser)
@@ -42,9 +42,10 @@ class CreateUserView(APIView):
 
 
 class CustomAuthToken(ObtainAuthToken):
-    permission_classes = [AllowAny]
+    # permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
+        print('reached')
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
