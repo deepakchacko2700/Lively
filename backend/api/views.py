@@ -33,8 +33,8 @@ class CreateUserView(APIView):
             newUser = serializer.save()
             Token.objects.create(user=newUser)
             newProfile = Profile(user=newUser)
-            newProfile.follower.add(newProfile)
             newProfile.save()
+            newProfile.follower.add(newProfile)
             print(serializer.data)
             return Response(serializer.data)
         else:

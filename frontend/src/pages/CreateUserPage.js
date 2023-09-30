@@ -41,7 +41,7 @@ export default function CreateUserPage() {
         try {
         const response = await fetch(`${API_URL}/api/create-user/`, requestOptions)
         const  data = await(response.json())
-        // console.log(data)
+        console.log(data)
         if (!response.ok) {
             if (data.username && data.password) {
                 setErrors({usernameError: data.username,
@@ -65,6 +65,7 @@ export default function CreateUserPage() {
         finally  {setLoading(false)}
     }
     return (
+        <form>
         <Grid container
             spacing={1}
             direction='column'
@@ -158,9 +159,7 @@ export default function CreateUserPage() {
                 </Grid>
 
             </Grid>
-
-            
-            
         </Grid>
+        </form>
     )
 }
