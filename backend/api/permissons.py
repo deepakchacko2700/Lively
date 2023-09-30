@@ -21,5 +21,6 @@ class PostPermissions(BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
-        return obj.post_owner == request.user
+        else:
+            return obj.post_owner.user == request.user
         

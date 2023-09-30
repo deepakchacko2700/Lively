@@ -7,7 +7,7 @@ import '../App.css'
 import UpdateProfileModal from '../components/UpdateProfileModal'
 import CardPost from '../components/CardPost';
 import { nanoid } from 'nanoid';
-
+import { API_URL } from '../components/Constants';
 
 
 
@@ -29,7 +29,7 @@ export default function ProfilePage() {
             headers : {'Authorization':`Token ${token}`},
         };
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/profile-viewset/${username}`,
+            const response = await fetch(`${API_URL}/api/profile-viewset/${username}`,
                                 requestOptions)
             const data = await response.json()
             setProfileData(data)
@@ -44,7 +44,7 @@ export default function ProfilePage() {
 
     React.useEffect(() => {
         if (profileData.id) {
-        fetch(`http://127.0.0.1:8000/api/post-viewset/get_profilePosts?profile_id=${profileData.id}`,
+        fetch(`${API_URL}/api/post-viewset/get_profilePosts?profile_id=${profileData.id}`,
             {
                 method :'GET',
                 headers : {'Content-Type':'application/json',
@@ -207,7 +207,7 @@ function FollowButton ({follow_status, token, id, setProfileData}) {
                         },
             body : JSON.stringify({'followStatus' : followStatus})
         };
-        fetch(`http://127.0.0.1:8000/api/follow/${id}/`, requestOptions)
+        fetch(`${API_URL}/api/follow/${id}/`, requestOptions)
         .then(res => res.json())
         .then(data => { 
             setProfileData(prevData => (

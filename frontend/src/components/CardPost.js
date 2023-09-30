@@ -5,6 +5,8 @@ import {Favorite} from '@mui/icons-material'
 import {Avatar, Typography, IconButton, Box} from '@mui/material'
 import {red} from '@mui/material/colors'
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
+import { API_URL } from './Constants'
+
 
 export default function CardPost(props) {
     const {id, post_img, post_text, post_owner, post_date,
@@ -21,7 +23,7 @@ export default function CardPost(props) {
     const handleLikeClick = () => {
         setLoading(true)
         const editedLike = !like
-        fetch(`http://127.0.0.1:8000/api/post-like/`, {
+        fetch(`${API_URL}/api/post-like/`, {
             method : 'POST',
             headers : {
                 'Authorization':`Token ${token}`,
@@ -64,26 +66,30 @@ export default function CardPost(props) {
                         subheader={post_date}
                         sx={{backgroundColor:'#ad7893'}}
                     />
+                    <ConditionalLink
+                        to={'../post/' + post_owner.user.username + '/' + id}
+                        style={{textDecoration:'none'}}
+                    >
                     {post_img &&
-                    <ConditionalLink to={'../post/' + post_owner.user.username + '/' + id}>
                     <CardMedia 
                         component='img'
                         src = {post_img}
-                        alt=""
-                        sx={{objectFit:'contain', height:300}}
+                        alt= ""
+                        sx={{objectFit:'contain'}}
                     />
-                    </ConditionalLink>}
+                    }
                     <CardContent 
                         sx={{backgroundColor:'#434345'}}
                     >                                                    
                         <Typography variant='body1' 
                             color='text.secondary'
                             textAlign='center'
-                            sx={{color: "#FFFFFF"}}
+                            sx={{color: "#FFFFFF",}}
                         >
                             {post_text}
                         </Typography>
                     </CardContent>
+                    </ConditionalLink>
                     <CardActions disableSpacing 
                         sx={{display:'flex', justifyContent:'space-evenly'}}
                     >

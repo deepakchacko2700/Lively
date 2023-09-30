@@ -2,6 +2,8 @@ import React from 'react'
 import {Modal, TextField, IconButton, Typography, Box, Button, Icon} from '@mui/material'
 import InsertPhoto from '@mui/icons-material/InsertPhoto';
 import CloseIcon from '@mui/icons-material/Close';
+import { API_URL } from './Constants';
+import Loader from '../components/Loader'
 
 export default function CreatePostModal(props) {
     const style = {
@@ -15,7 +17,7 @@ export default function CreatePostModal(props) {
         boxShadow: 24,
         p: 4,
       };
-
+    const [loading, setLoading] = React.useState(false)
     const token_obj = JSON.parse(sessionStorage.getItem('Token_obj'));
     const token = token_obj.token
     const [postForm, setPostForm] = React.useState(
@@ -30,7 +32,9 @@ export default function CreatePostModal(props) {
         })
         )
     };
+
     function handleSubmit(event) {
+        setLoading(true)
         event.preventDefault();
         const form_data = new FormData();
         postForm.post_image && form_data.append('post_img', postForm.post_image, postForm.post_image.name)
@@ -42,12 +46,14 @@ export default function CreatePostModal(props) {
             headers : {'Authorization':`Token ${token}`},
             body :form_data
         }
-        fetch(`http://127.0.0.1:8000/api/post-viewset/`, requestOptions)
+        fetch(`${API_URL}/api/post-viewset/`, requestOptions)
         .then(res => res.json())
         .then(data => {console.log(data);
-                        // props.fetchPostdata();
+                        props.fetchPosts();
+                        props.setOpenModal(false)
                         })      
         .catch(err => console.error(err.message))  
+        .finally(() => setLoading(false))
     };
     
     return (
@@ -63,49 +69,57 @@ export default function CreatePostModal(props) {
                         <CloseIcon />
                     </IconButton>
                 </Box>
-            <Typography component='h5'>Create your Post</Typography>
-            <TextField
-                label='Image'
-                variant="outlined"   
-                margin='normal'       
-                type="text"
-                InputProps={{
-                    endAdornment: (
-                    <Box display='flex'>
-                     <Icon mb={1}>
-                        <InsertPhoto />
-                     </Icon>
+                <Typography component='h5'mt={-1}>Create your Post</Typography>
+                <TextField
+                    label='Image'
+                    variant="outlined"   
+                    margin='normal'       
+                    type="text"
+                    size='small'
+                    InputProps={{
+                        endAdornment: (
+                        <Box display='flex'>
+                            <Icon mb={1}>
+                                <InsertPhoto />
+                            </Icon>
                     
-                     <input
-                        styles={{display:"none"}}
-                        type="file"
-                        // hidden
-                        onChange={handleChange}
-                        name="post_image"
-                     />
-                    </Box>
+                            <input
+                                styles={{display:"none"}}
+                                type="file"
+                                // hidden
+                                onChange={handleChange}
+                                name="post_image"
+                            />
+                        </Box>
                         ),
                     }}
+                    />
+                <TextField
+                    label='Your text'
+                    variant='outlined'
+                    fullWidth
+                    margin='normal'
+                    size='small'
+                    name='post_text'
+                    value={postForm.post_text}
+                    onChange={handleChange}
                 />
-            <TextField
-                label='Your text'
-                variant='outlined'
-                fullWidth
-                margin='normal'
-                name='post_text'
-                value={postForm.post_text}
-                onChange={handleChange}
-                />
-            
-                <Button 
-                    variant='contained' 
-                    color='primary' 
-                    onClick={handleSubmit}
+                <Box sx={{display:'flex', 
+                        justifyContent:'center',
+                        alignItems:'center',
+                        flexDirection:'column'
+                        }}>
+                    <Button 
+                        variant='contained' 
+                        color='primary' 
+                        disabled={loading}
+                        onClick={handleSubmit}
                     >
-                    Submit
-                </Button>
+                        Submit
+                    </Button>
+                    {loading && <Loader />}
+                </Box>
             </Box>
-            
         </Modal>
     )
 }

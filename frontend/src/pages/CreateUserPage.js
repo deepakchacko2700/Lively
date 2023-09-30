@@ -6,7 +6,7 @@ import Visibility from '@mui/icons-material/Visibility'
 import  VisibilityOff  from '@mui/icons-material/VisibilityOff';
 import getCookie from "../components/getCookie";
 import Loader from '../components/Loader'
-
+import { API_URL } from "../components/Constants";
 
 export default function CreateUserPage() {
     const [formData, setFormData] = React.useState(
@@ -39,7 +39,7 @@ export default function CreateUserPage() {
             body : JSON.stringify(formData)
         }
         try {
-        const response = await fetch('http://127.0.0.1:8000/api/create-user/', requestOptions)
+        const response = await fetch(`${API_URL}/api/create-user/`, requestOptions)
         const  data = await(response.json())
         // console.log(data)
         if (!response.ok) {

@@ -33,6 +33,7 @@ class CreateUserView(APIView):
             newUser = serializer.save()
             Token.objects.create(user=newUser)
             newProfile = Profile(user=newUser)
+            newProfile.follower.add(newProfile)
             newProfile.save()
             print(serializer.data)
             return Response(serializer.data)
@@ -137,7 +138,7 @@ class PostViewSet(GenericViewSet):
         user = self.request.user
         profile = Profile.objects.get(user=user)
         following_qs = profile.following.all()
-        return Post.objects.filter(post_owner__in=following_qs)
+        return Post.objects.filter(post_owner__in=following_qs).order_by('-post_date')
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -156,6 +157,12 @@ class PostViewSet(GenericViewSet):
         serializer = self.get_serializer(post)
         # print(serializer.data)
         return Response(serializer.data)
+
+    def destroy(self, request, pk):
+        post = self.get_object()
+        # print(post)
+        post.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
   
     @action(detail=False, methods=['GET'])
     def get_profilePosts(self, request):

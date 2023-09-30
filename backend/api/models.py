@@ -25,6 +25,7 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
         if self.profile_img:
             do_resize(self.profile_img)
+        
 
 
 class Post(models.Model):
@@ -39,8 +40,8 @@ class Post(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        if self.profile_img:
-            do_resize(self.profile_img)
+        if self.post_img:
+            do_resize(self.post_img)
     
     
 

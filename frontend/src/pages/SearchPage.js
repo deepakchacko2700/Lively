@@ -3,7 +3,7 @@ import {Box, TextField, IconButton, Avatar, Typography, Modal } from '@mui/mater
 import SearchIcon from '@mui/icons-material/Search'
 import { nanoid } from 'nanoid'
 import {Link} from 'react-router-dom'
-
+import { API_URL } from '../components/Constants'
 
 export default function SearchPage() {
     const [searchField, setSearchField] = React.useState('')
@@ -13,7 +13,7 @@ export default function SearchPage() {
     const token = token_obj.token
 
     const handleClick = () => {
-        fetch(`http://127.0.0.1:8000/api/profile-viewset/searchProfile?username=${searchField}`, {
+        fetch(`${API_URL}/api/profile-viewset/searchProfile?username=${searchField}`, {
             method: 'GET',
             headers: {'Authorization':`Token ${token}`,
                         'Content-Type':'application/json'

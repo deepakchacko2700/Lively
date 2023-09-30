@@ -4,9 +4,8 @@ import {Button, TextField, Typography, IconButton, InputAdornment, Box} from '@m
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Visibility from '@mui/icons-material/Visibility'
 import  VisibilityOff  from '@mui/icons-material/VisibilityOff';
-import getCookie from '../components/getCookie';
 import Loader from '../components/Loader'
-
+import { API_URL } from '../components/Constants';
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -53,7 +52,7 @@ export default function LoginPage() {
             }
 
             try {
-                const result = await fetch('http://127.0.0.1:8000/api-token-auth/', requestOptions)
+                const result = await fetch(`${API_URL}/api-token-auth/`, requestOptions)
                 if (!result.ok) {
                     throw new Error ('Invalid Username or Password')
                 };

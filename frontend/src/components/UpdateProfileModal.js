@@ -2,6 +2,7 @@ import React from 'react';
 import {Modal, TextField, IconButton, Typography, Box, Button} from '@mui/material'
 import { UploadFile} from '@mui/icons-material'
 import CloseIcon from '@mui/icons-material/Close';
+import { API_URL } from './Constants';
 
 
 export default function UpdateProfileModal(props) {
@@ -56,7 +57,7 @@ export default function UpdateProfileModal(props) {
             headers : {'Authorization':`Token ${props.token}`},
             body :form_data
         }
-            fetch(`http://127.0.0.1:8000/api/profile-viewset/${props.username}/`, requestOptions)
+            fetch(`${API_URL}/api/profile-viewset/${props.username}/`, requestOptions)
             .then(res => {
                 if (!res.ok) {
                     res.json()

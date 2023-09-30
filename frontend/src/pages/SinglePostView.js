@@ -1,23 +1,26 @@
 import React from 'react'
 import { useParams, useNavigate} from 'react-router-dom'
-import {Grid, Box, TextField, IconButton, Typography, Avatar, Button} from '@mui/material'
+import {Grid, Box, TextField, IconButton, Typography, Avatar, Button, Tooltip} from '@mui/material'
 import SendIcon from '@mui/icons-material/Send';
 import CardPost from '../components/CardPost'
 import { nanoid } from 'nanoid';
+import { API_URL } from '../components/Constants';
+import DeleteIcon from '@mui/icons-material/Delete'
 
 
 export default function SinglePostView() {
     const navigate = useNavigate()
-    const {id} = useParams()
+    const {id, username} = useParams()
     const[post, setPost] = React.useState(null)
     const[comments, setComments] = React.useState([])
     const[comment, setComment] = React.useState('')
     const token_obj = JSON.parse(sessionStorage.getItem('Token_obj'))
     const token = token_obj.token
+    const token_username = token_obj.username
     // console.log(comment, id)
 
     React.useEffect(() => {
-        fetch(`http://127.0.0.1:8000/api/post-viewset/${id}`,
+        fetch(`${API_URL}/api/post-viewset/${id}`,
         {
             method :'GET',
             headers : {'Authorization':`Token ${token}`},
@@ -28,7 +31,7 @@ export default function SinglePostView() {
     }, [id, token]);
 
     React.useEffect(() => {
-        fetch(`http://127.0.0.1:8000/api/comments-viewset?post_id=${id}`,
+        fetch(`${API_URL}/api/comments-viewset?post_id=${id}`,
         {
             method:'GET',
             headers: {'Authorization':`Token ${token}`},
@@ -79,7 +82,7 @@ export default function SinglePostView() {
     
     const handleClick = () => {
         const comments_count = comments.length
-        fetch(`http://127.0.0.1:8000/api/comments-viewset/`, {
+        fetch(`${API_URL}/api/comments-viewset/`, {
             method: 'POST',
             headers: {'Authorization':`Token ${token}`,
                         'Content-Type':'application/json',
@@ -95,6 +98,23 @@ export default function SinglePostView() {
             setPost(prev => ({...prev, comments_count:comments_count+1}))
         })
     };
+
+    const handleDelete = () => {
+        alert('Are you sure')
+        fetch(`${API_URL}/api/post-viewset/${id}`,
+           { method :'DELETE',
+            headers : {'Authorization':`Token ${token}`},}
+        ).then(res => {
+            if (!res.ok) throw new Error(res.status)
+            else return res.text()
+        })
+        .then(() => {
+            console.log('Deleted successfully')
+            navigate(-1)}
+            )
+        .catch(error => console.error(error.message))
+    };
+
     return(
         <>
             <Grid container>
@@ -119,10 +139,27 @@ export default function SinglePostView() {
                     mt:-2,
                     }}
                 >
-                    <Box  width={450}>
-                        {post && <CardPost {...post} /> }                       
+                    <Box sx={{width: {xs:'95vw', md:500} }}  >
+                        {post && <CardPost {...post} /> }                      
                     </Box>
-                    <Box mt='-30px' mb={3} width={450}>
+
+                    {username === token_username &&
+                    <Box sx={{
+                            width: 50,
+                            display:'flex',
+                            justifyContent:'center',
+                            mt:-5,
+                            mb:2
+                        }}
+                    >
+                        <Tooltip title="Delete the post" placement='right'>
+                            <IconButton onClick={handleDelete}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                    }
+                    <Box  mb={3} sx={{width: {xs:'95vw', md:500} }}   >
                             <TextField 
                                 fullWidth
                                 name='comment'

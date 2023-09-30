@@ -4,6 +4,8 @@ import { AppBar, Toolbar, Box, IconButton, Typography } from '@mui/material';
 import {Menu, MenuItem, Button, Avatar, Modal} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
+import { API_URL } from './Constants';
+
 
 export default function NavBar({token, username}) {
     const pages = ['profile', 'post']
@@ -14,7 +16,7 @@ export default function NavBar({token, username}) {
     const navigate = useNavigate()
 
     React.useEffect(() => {
-        fetch(`http://127.0.0.1:8000/api/profile-viewset/${username}/get_userProfile/`, {
+        fetch(`${API_URL}/api/profile-viewset/${username}/get_userProfile/`, {
             method : 'GET',
             headers : {
                 'Authorization' : `Token ${token}`,
@@ -35,7 +37,7 @@ export default function NavBar({token, username}) {
     };
 
     const handleLogout = () => {
-        fetch(`http://127.0.0.1:8000/api-logout/`, {
+        fetch(`${API_URL}/api-logout/`, {
             method: 'POST',
             headers: {
                 'Authorization': `Token ${token}`
@@ -123,7 +125,7 @@ export default function NavBar({token, username}) {
                     <Box float='right' 
                         display='flex'
                         marginLeft='auto'
-                        marginRight={3}
+                        marginRight={1}
                     >
 
                         <Box sx={{

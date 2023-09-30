@@ -2,7 +2,7 @@ import React from 'react'
 import {Box, Fab, Grid,} from '@mui/material'
 import CreatePostModal from '../components/CreatePostModal'
 import CardPost from '../components/CardPost'
-
+import { API_URL } from '../components/Constants'
 
 export default function PostPage() {
     const [openModal, setOpenModal] = React.useState(false)
@@ -17,7 +17,7 @@ export default function PostPage() {
                         'Authorization':`Token ${token}`},
         };
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/post-viewset/`, requestOptions)
+            const response = await fetch(`${API_URL}/api/post-viewset/`, requestOptions)
             const data = await response.json()
             setPosts(data)
         } catch (error) {
@@ -64,7 +64,10 @@ export default function PostPage() {
                 <div className='createPostModal-contaner'>
                     {openModal && <CreatePostModal 
                                     open={openModal}
-                                    setOpenModal={setOpenModal} />}
+                                    setOpenModal={setOpenModal}
+                                    fetchPosts={fetchPosts}
+                                    />
+                                    }
                 </div>
         </Grid>
     </>

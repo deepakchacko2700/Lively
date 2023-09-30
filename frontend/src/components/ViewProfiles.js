@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search"
 import { nanoid } from 'nanoid';
 import {Link} from 'react-router-dom'
 import '../App.css'
+import { API_URL } from './Constants';
 
 
 export default function ViewProfiles({token}) {
@@ -54,7 +55,7 @@ export default function ViewProfiles({token}) {
     );
    
     React.useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/profile-viewset/', {
+        fetch(`${API_URL}/api/profile-viewset/`, {
             method : 'GET',
             headers : {
                 'Authorization':`Token ${token}`,
@@ -67,7 +68,7 @@ export default function ViewProfiles({token}) {
 
     const handleClick = () => {
         if (searchField) {
-        fetch(`http://127.0.0.1:8000/api/profile-viewset/searchProfile?username=${searchField}`, {
+        fetch(`${API_URL}/api/profile-viewset/searchProfile?username=${searchField}`, {
             method: 'GET',
             headers: {'Authorization':`Token ${token}`},
         })
